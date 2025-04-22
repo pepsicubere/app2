@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestiune Locală cu PouchDB</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/pouchdb@7.3.1/dist/pouchdb.min.js"></script>
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: 'Arial', sans-serif;
+    }
+    #sidebar {
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 250px;
+      background-color: #343a40;
+    }
+    #sidebar .nav-link {
+      color: #fff;
+    }
+    #sidebar .nav-link:hover {
+      background-color: #007bff;
+    }
+    #content {
+      margin-left: 250px;
+      padding: 20px;
+    }
+    h1 {
+      color: #007bff;
+    }
+    .card-body {
+      background-color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div id="sidebar" class="bg-dark">
+    <div class="sidebar-header text-white text-center py-4">
+      <h3>Gestiune Stocuri</h3>
+    </div>
+    <ul class="nav flex-column px-3">
+      <li class="nav-item">
+        <a class="nav-link active" href="#" onclick="loadModule('articole', document.getElementById('moduleContent'))">
+          Articole
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" onclick="loadModule('gestiuni', document.getElementById('moduleContent'))">
+          Gestiuni
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" onclick="loadModule('stocuri', document.getElementById('moduleContent'))">
+          Stocuri
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" onclick="loadModule('transferuri', document.getElementById('moduleContent'))">
+          Transferuri
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" onclick="loadModule('intrari', document.getElementById('moduleContent'))">
+          Intrări
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" onclick="loadModule('iesiri', document.getElementById('moduleContent'))">
+          Ieșiri
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" onclick="loadModule('casari', document.getElementById('moduleContent'))">
+          Casări
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Content -->
+  <div id="content">
+    <div class="container">
+      <h1>Gestiune Locală</h1>
+      <div id="moduleContent"></div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS + PouchDB -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Importarea fișierelor JS -->
+  <script src="js/db.js"></script>
+  <script src="js/articole.js"></script>
+  <script src="js/gestiuni.js"></script>
+  <script src="js/stocuri.js"></script>
+  <script src="js/transferuri.js"></script>
+  <script src="js/intrari.js"></script>
+  <script src="js/iesiri.js"></script>
+  <script src="js/casari.js"></script>
+
+  <script>
+    // Funcția de încărcare a modulelor
+    function loadModule(module, content) {
+      switch (module) {
+        case 'articole':
+          loadArticole(content);
+          break;
+        case 'gestiuni':
+          loadGestiuni(content);
+          break;
+        case 'stocuri':
+          loadStocuri(content);
+          break;
+        case 'transferuri':
+          loadTransferuri(content);
+          break;
+        case 'intrari':
+          loadIntrari(content);
+          break;
+        case 'iesiri':
+          loadIesiri(content);
+          break;
+        case 'casari':
+          loadCasari(content);
+          break;
+        default:
+          content.innerHTML = '<p>Modul necunoscut.</p>';
+      }
+    }
+
+    // Funcțiile de încărcare ale modulelor
+    function loadArticole(content) {
+      content.innerHTML = `
+        <h3>Articole</h3>
+        <form id="articolForm">
+          <div class="form-group">
+            <label for="nume">Nume Articol:</label>
+            <input type="text" class="form-control" id="nume" placeholder="Ex: Hârtie A4" required>
+          </div>
+          <div class="form-group">
+            <label for="cantitate">Cantitate:</label>
+            <input type="number" class="form-control" id="cantitate" placeholder="Ex: 50" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Adaugă Articol</button>
+        </form>
+        <div id="outputArticole"></div>
+      `;
+    }
+
+    function loadGestiuni(content) {
+      content.innerHTML = `
+        <h3>Gestiuni</h3>
+        <form id="gestiuniForm">
+          <div class="form-group">
+            <label for="nume">Nume Gestiune</label>
+            <input type="text" class="form-control" id="nume" placeholder="Ex: Gestiunea A" required>
+          </div>
+          <div class="form-group">
+            <label for="locatie">Locație</label>
+            <input type="text" class="form-control" id="locatie" placeholder="Ex: Depozit principal" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Adaugă Gestiune</button>
+        </form>
+        <div id="outputGestiuni"></div>
+      `;
+    }
+
+    function loadStocuri(content) {
+      content.innerHTML = `
+        <h3>Stocuri</h3>
+        <form id="stocuriForm">
+          <div class="form-group">
+            <label for="articol">Articol</label>
+            <input type="text" class="form-control" id="articol" placeholder="Ex: Hârtie A4" required>
+          </div>
+          <div class="form-group">
+            <label for="cantitate">Cantitate</label>
+            <input type="number" class="form-control" id="cantitate" placeholder="Ex: 100" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Adaugă în Stoc</button>
+        </form>
+        <div id="outputStocuri"></div>
+      `;
+    }
+
+    function loadTransferuri(content) {
+      content.innerHTML = "<h3>Transferuri</h3>";
+    }
+
+    function loadIntrari(content) {
+      content.innerHTML = "<h3>Intrări</h3>";
+    }
+
+    function loadIesiri(content) {
+      content.innerHTML = "<h3>Ieșiri</h3>";
+    }
+
+    function loadCasari(content) {
+      content.innerHTML = "<h3>Casări</h3>";
+    }
+  </script>
+
+</body>
+</html>
